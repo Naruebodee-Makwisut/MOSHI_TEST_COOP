@@ -20,22 +20,22 @@ report 50116 "PLSR_Sales Report By Division2"
             column(PeriodDate; PeriodDate) { }
             column(ReportFilterText; ReportFilterText) { }
 
-            column(Variant_Code; LSCTB."Variant Code") { }
-            column(Store_No_TransSale; LSCTB."Store No.") { }
-            column(Division_Code_TransSale; LSCTB."Division Code") { }
-            column(Division_TransSale; LSCTB."Posting Exception Key") { }
-            column(Receipt_No_TransSale; LSCTB."Receipt No.") { }
-            column(Date_TransSale; Format(LSCTB.Date, 0, '<Closing><Day,2>/<Month,2>/<Year4>')) { }
-            column(TransType; LSCTB."POS Line Description") { }
-            column(Item_No_TransSale; LSCTB."Item No.") { }
-            column(Item_Name_ItemTB; 'LSCTB.Epc') { }
-            column(Qty; LSCTB.Quantity) { }
-            column(Unit_of_Measure_TransSale; LSCTB."Unit of Measure") { }
-            column(BaseQty; LSCTB."UOM Quantity") { }
-            column(UnitPrice; LSCTB.Price) { }
-            column(Amount; LSCTB.Price * LSCTB.Quantity) { }
-            column(Discount_Amount_TransSale; LSCTB."Discount Amount") { }
-            column(TotalAmt; LSCTB."Net Amount") { }
+            column(Variant_Code; TempLSCTB."Variant Code") { }
+            column(Store_No_TransSale; TempLSCTB."Store No.") { }
+            column(Division_Code_TransSale; TempLSCTB."Division Code") { }
+            column(Division_TransSale; TempLSCTB."Posting Exception Key") { }
+            column(Receipt_No_TransSale; TempLSCTB."Receipt No.") { }
+            column(Date_TransSale; Format(TempLSCTB.Date, 0, '<Closing><Day,2>/<Month,2>/<Year4>')) { }
+            column(TransType; TempLSCTB."POS Line Description") { }
+            column(Item_No_TransSale; TempLSCTB."Item No.") { }
+            column(Item_Name_ItemTB; 'TempLSCTB.Epc') { }
+            column(Qty; TempLSCTB.Quantity) { }
+            column(Unit_of_Measure_TransSale; TempLSCTB."Unit of Measure") { }
+            column(BaseQty; TempLSCTB."UOM Quantity") { }
+            column(UnitPrice; TempLSCTB.Price) { }
+            column(Amount; TempLSCTB.Price * TempLSCTB.Quantity) { }
+            column(Discount_Amount_TransSale; TempLSCTB."Discount Amount") { }
+            column(TotalAmt; TempLSCTB."Net Amount") { }
             column(ShowVariant; not RettailSetup."PLSPOS_Show Var for Report VIP") { }
 
             // ==========================================
@@ -69,8 +69,8 @@ report 50116 "PLSR_Sales Report By Division2"
                 BaseQty: Decimal;
                 UnitPrice: Decimal;
             begin
-                LSCTB.Reset();
-                LSCTB.DeleteAll();
+                TempLSCTB.Reset();
+                TempLSCTB.DeleteAll();
                 Clear(DictItemQty);
                 Clear(DictItemBaseQty);
                 Clear(DictItemAmt);
@@ -92,10 +92,11 @@ report 50116 "PLSR_Sales Report By Division2"
                 if Choose1Filter then begin
                     PeriodDate := 'ประจำงวดวันที่ ' + Format(FromDateFilter, 0, '<Closing><Day,2>/<Month,2>/<Year4>') + ' ถึง ' + Format(TodateFilter, 0, '<Closing><Day,2>/<Month,2>/<Year4>');
                     PosSalesQry.SetFilter(DateFilter, '%1..%2', FromDateFilter, TodateFilter);
-                end else if Choose2Filter then begin
-                    PeriodDate := 'ประจำงวดวันที่ ' + Format(FDateFilter, 0, '<Closing><Day,2>/<Month,2>/<Year4>');
-                    PosSalesQry.SetFilter(DateFilter, '%1', FDateFilter);
-                end;
+                end else
+                    if Choose2Filter then begin
+                        PeriodDate := 'ประจำงวดวันที่ ' + Format(FDateFilter, 0, '<Closing><Day,2>/<Month,2>/<Year4>');
+                        PosSalesQry.SetFilter(DateFilter, '%1', FDateFilter);
+                    end;
 
                 if StoreFilter <> '' then begin
                     PosSalesQry.SetFilter(StoreNoFilter, StoreFilter);
@@ -159,36 +160,36 @@ report 50116 "PLSR_Sales Report By Division2"
                     GrandTotal_Amount += CalcAmount;
                     GrandTotal_Discount += PosSalesQry.Discount_Amount;
 
-                    LSCTB.Init();
-                    LSCTB."Store No." := PosSalesQry.Store_No;
-                    LSCTB."POS Terminal No." := PosSalesQry.POS_Terminal_No;
-                    LSCTB."Transaction No." := PosSalesQry.Transaction_No;
-                    LSCTB."Line No." := PosSalesQry.Line_No;
-                    LSCTB."Variant Code" := PosSalesQry.Variant_Code;
-                    LSCTB."Receipt No." := PosSalesQry.Receipt_No;
-                    LSCTB.Date := PosSalesQry.Date;
-                    LSCTB."Item No." := PosSalesQry.Item_No;
-                    // LSCTB.Epc := PosSalesQry.Item_Description + ' ' + PosSalesQry.Item_Description_2;
-                    LSCTB."Division Code" := PosSalesQry.LSC_Division_Code;
-                    LSCTB."Posting Exception Key" := Format(PosSalesQry.LSC_Division_Code + ' - ' + PosSalesQry.Division_Description);
-                    LSCTB.Quantity := Qty;
-                    LSCTB.Price := UnitPrice;
-                    LSCTB."Discount Amount" := PosSalesQry.Discount_Amount;
-                    LSCTB."Unit of Measure" := PosSalesQry.Unit_of_Measure;
-                    LSCTB."UOM Quantity" := BaseQty;
+                    TempLSCTB.Init();
+                    TempLSCTB."Store No." := PosSalesQry.Store_No;
+                    TempLSCTB."POS Terminal No." := PosSalesQry.POS_Terminal_No;
+                    TempLSCTB."Transaction No." := PosSalesQry.Transaction_No;
+                    TempLSCTB."Line No." := PosSalesQry.Line_No;
+                    TempLSCTB."Variant Code" := PosSalesQry.Variant_Code;
+                    TempLSCTB."Receipt No." := PosSalesQry.Receipt_No;
+                    TempLSCTB.Date := PosSalesQry.Date;
+                    TempLSCTB."Item No." := PosSalesQry.Item_No;
+                    // TempLSCTB.Epc := PosSalesQry.Item_Description + ' ' + PosSalesQry.Item_Description_2;
+                    TempLSCTB."Division Code" := PosSalesQry.LSC_Division_Code;
+                    TempLSCTB."Posting Exception Key" := Format(PosSalesQry.LSC_Division_Code + ' - ' + PosSalesQry.Division_Description);
+                    TempLSCTB.Quantity := Qty;
+                    TempLSCTB.Price := UnitPrice;
+                    TempLSCTB."Discount Amount" := PosSalesQry.Discount_Amount;
+                    TempLSCTB."Unit of Measure" := PosSalesQry.Unit_of_Measure;
+                    TempLSCTB."UOM Quantity" := BaseQty;
 
                     TransType := Format(PosSalesQry.Transaction_Type);
                     if PosSalesQry.Return_No_Sale then
                         TransType := 'Refund';
-                    LSCTB."POS Line Description" := TransType;
+                    TempLSCTB."POS Line Description" := TransType;
 
-                    LSCTB."Net Amount" := CalcAmount;
+                    TempLSCTB."Net Amount" := CalcAmount;
 
-                    LSCTB.Insert();
+                    TempLSCTB.Insert();
                 end;
                 PosSalesQry.Close();
 
-                TransSale.SetRange(Number, 1, LSCTB.Count());
+                TransSale.SetRange(Number, 1, TempLSCTB.Count());
             end;
 
             trigger OnAfterGetRecord()
@@ -197,15 +198,14 @@ report 50116 "PLSR_Sales Report By Division2"
                 DivKey: Text;
             begin
                 if Number = 1 then begin
-                    if not LSCTB.FindSet() then
+                    if not TempLSCTB.FindSet() then
                         CurrReport.Break();
-                end else begin
-                    if LSCTB.Next() = 0 then
+                end else
+                    if TempLSCTB.Next() = 0 then
                         CurrReport.Break();
-                end;
 
-                ItemKey := LSCTB."Division Code" + '_' + LSCTB."Item No.";
-                DivKey := LSCTB."Division Code";
+                ItemKey := TempLSCTB."Division Code" + '_' + TempLSCTB."Item No.";
+                DivKey := TempLSCTB."Division Code";
 
                 // ดึงยอดรวมกลุ่มสินค้า (Item Group) ออกมาใส่คอลัมน์
                 if DictItemQty.ContainsKey(ItemKey) then begin
@@ -249,18 +249,21 @@ report 50116 "PLSR_Sales Report By Division2"
                             ApplicationArea = All;
                             TableRelation = "LSC Store"."No.";
                             Caption = 'Store No. :';
+                            ToolTip = 'Specifies the Store No. to filter the report.';
                         }
                         field("Item No. :"; ItemNoFilter)
                         {
                             ApplicationArea = All;
                             TableRelation = Item."No.";
                             Caption = 'Item No. :';
+                            ToolTip = 'Specifies the Item No. to filter the report.';
                         }
                         field("Division Code :"; DivisionCodeFilter)
                         {
                             ApplicationArea = All;
                             TableRelation = "LSC Division".Code;
                             Caption = 'Division Code :';
+                            ToolTip = 'Specifies the Division Code to filter the report.';
                         }
                     }
                     group("Date Filter 1")
@@ -269,6 +272,7 @@ report 50116 "PLSR_Sales Report By Division2"
                         {
                             ApplicationArea = All;
                             Caption = 'Period';
+                            ToolTip = 'Specifies the Period to filter the report.';
                             trigger OnValidate()
                             begin
                                 if Choose1Filter then
@@ -284,6 +288,7 @@ report 50116 "PLSR_Sales Report By Division2"
                                 ApplicationArea = All;
                                 Editable = Choose1Filter;
                                 Caption = 'Start Date';
+                                ToolTip = 'Specifies the Start Date to filter the report.';
                             }
 
                             field("End Date"; TodateFilter)
@@ -291,6 +296,7 @@ report 50116 "PLSR_Sales Report By Division2"
                                 ApplicationArea = All;
                                 Editable = Choose1Filter;
                                 Caption = 'End Date';
+                                ToolTip = 'Specifies the End Date to filter the report.';
                             }
                         }
                     }
@@ -300,6 +306,7 @@ report 50116 "PLSR_Sales Report By Division2"
                         {
                             ApplicationArea = All;
                             Caption = 'At Date';
+                            ToolTip = 'Specifies the At Date to filter the report.';
                             trigger OnValidate()
                             begin
                                 if Choose2Filter then
@@ -315,6 +322,7 @@ report 50116 "PLSR_Sales Report By Division2"
                                 ApplicationArea = All;
                                 Editable = Choose2Filter;
                                 Caption = 'Date';
+                                ToolTip = 'Specifies the Date to filter the report.';
                             }
                         }
                     }
@@ -339,14 +347,14 @@ report 50116 "PLSR_Sales Report By Division2"
     end;
 
     var
-        PosSalesQry: Query "PLSR_Sales Report By DivisionQ"; //ตัวแปรรับคิวรี่มาใช้งาน ไม่ต้องดึง table เยอะ
-        LSVIPRepFunction: Codeunit "PLSR_Report Function";
         ComInfo: Record "Company Information";
         // ItemTB: Record Item; ไปอยู่ในคิวรี่แทนแล้ว
         //  DivisonTB: Record "LSC Division";
         // TransHeaderTB: Record "LSC Transaction Header";
         RettailSetup: Record "LSC Retail Setup";
-        LSCTB: Record "LSC Trans. Sales Entry" temporary;
+        TempLSCTB: Record "LSC Trans. Sales Entry" temporary;
+        LSVIPRepFunction: Codeunit "PLSR_Report Function";
+        PosSalesQry: Query "PLSR_Sales Report By DivisionQ"; //ตัวแปรรับคิวรี่มาใช้งาน ไม่ต้องดึง table เยอะ
         ShowTime: Text[50];
         ShowDate: Text[50];
         PeriodDate: Text[150];

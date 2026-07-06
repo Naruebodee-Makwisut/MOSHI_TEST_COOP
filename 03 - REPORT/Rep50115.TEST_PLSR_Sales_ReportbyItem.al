@@ -115,17 +115,20 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                             ApplicationArea = All;
                             TableRelation = "LSC Store"."No.";
                             Caption = 'Store No. :';
+                            ToolTip = 'Specifies the Store No. to filter the report.';
                         }
                         field("Item No. :"; ItemNoFilter)
                         {
                             ApplicationArea = All;
                             TableRelation = Item."No.";
                             Caption = 'Item No. :';
+                            ToolTip = 'Specifies the Item No. to filter the report.';
                         }
                         field("Show Quantity Zero :"; ShowQtyZero)
                         {
                             ApplicationArea = All;
                             Caption = 'Show Quantity Zero :';
+                            ToolTip = 'Specifies the Show Quantity Zero to filter the report.';
                         }
                     }
                     group("Date Filter 1")
@@ -134,6 +137,7 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                         {
                             ApplicationArea = All;
                             Caption = 'Period';
+                            ToolTip = 'Specifies the Period to filter the report.';
                             trigger OnValidate()
                             begin
                                 if Choose1Filter then
@@ -149,6 +153,7 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                                 ApplicationArea = All;
                                 Editable = Choose1Filter;
                                 Caption = 'Start Date';
+                                ToolTip = 'Specifies the "Start Date to filter the report.';
                             }
 
                             field("End Date"; TodateFilter)
@@ -156,6 +161,7 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                                 ApplicationArea = All;
                                 Editable = Choose1Filter;
                                 Caption = 'End Date';
+                                ToolTip = 'Specifies the End Date to filter the report.';
                             }
                         }
                     }
@@ -165,6 +171,7 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                         {
                             ApplicationArea = All;
                             Caption = 'At Date';
+                            ToolTip = 'Specifies the At Date to filter the report.';
                             trigger OnValidate()
                             begin
                                 if Choose2Filter then
@@ -180,6 +187,7 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
                                 ApplicationArea = All;
                                 Editable = Choose2Filter;
                                 Caption = 'Date';
+                                ToolTip = 'Specifies the Date to filter the report.';
                             }
 
                         }
@@ -205,8 +213,8 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
     end;
 
     var
-        LSVIPRepFunction: Codeunit "PLSR_Report Function";
         ComInfo: Record "Company Information";
+        LSVIPRepFunction: Codeunit "PLSR_Report Function";
         ShowTime: Text[50];
         ShowDate: Text[50];
         DateFilter: Text[100];
@@ -269,8 +277,8 @@ report 50115 "TEST_PLSR_Sales_Report by Item"
 
     local procedure PrecomputeRowData()
     var
-        SalesQuery: Query "TEST_PLSR_Sales By Item";
         ItemRec: Record Item;
+        SalesQuery: Query "TEST_PLSR_Sales By Item";
         GroupKeys: List of [Text];
         ItemNoOfKey: Dictionary of [Text, Code[20]];
         UOMOfKey: Dictionary of [Text, Code[10]];
