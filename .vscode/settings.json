@@ -1,0 +1,11 @@
+{
+    "CRS.ObjectNamePrefix": "TEST_",
+    "CRS.OnSaveAlFileAction": "Rename",
+    "editor.formatOnSave": true,
+    "CRS.RemoveUnderscoreFromFilename": false,
+    "CRS.FileNamePattern": "<ObjectTypeShort><ObjectId>.<ObjectNameShort>.al",
+    "al.enableCodeAnalysis": true,
+    "al.codeAnalyzers": [
+        "${CodeCop}"
+    ],
+}
