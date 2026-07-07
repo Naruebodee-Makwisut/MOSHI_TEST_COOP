@@ -8,4 +8,5 @@
     "al.codeAnalyzers": [
         "${CodeCop}"
     ],
+    "al.ruleSetPath": "./.vscode/Temporary.ruleset.json"
 }

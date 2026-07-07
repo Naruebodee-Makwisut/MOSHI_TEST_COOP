@@ -1,0 +1,58 @@
+{
+    "name": "Company ruleset",
+    "generalAction": "Hidden",
+    "description": "These rules must be respected by all the AL code written within the company.",
+    "rules": [
+        {
+            "id": "AS0013",
+            "action": "Hidden",
+            "justification": "Hide Error 50000 is not valid."
+        },
+        {
+            "id": "AA0021",
+            "action": "Hidden",
+            "justification": "Hide Warning Soring declare variable"
+        }
+        ,
+        {
+            "id": "AA0218",
+            "action": "Hidden",
+            "justification": "Hide Warning Tooltip property"
+        },
+        {
+            "id": "AA0214",
+            "action": "Hidden",
+            "justification": "Hide Warning modified before saving database"
+        },
+        {
+            "id": "AS0084",
+            "action": "Hidden",
+            "justification": "Hide error about id range [50000..99999]"
+        },
+        {
+            "id": "AA0072",
+            "action": "Hidden",
+            "justification": "The name of variables and parameters must be suffixed with the type or object name." 
+        },
+        {
+            "id": "AA0215",
+            "action": "Hidden",
+            "justification": "Follow the style guide about the best practices for naming." 
+        },
+        {
+            "id": "AA0074",
+            "action": "Hidden",
+            "justification": "TextConst and Label variable names should have an approved suffix." 
+        },
+        {
+            "id": "AA0470",
+            "action": "Hidden",
+            "justification": "Placeholders should have a comment explaining their content." 
+        },
+        {
+            "id": "AA0247",
+            "action": "Hidden",
+            "justification": "Placeholders should have a comment explaining their content." 
+        }
+    ]  
+}
